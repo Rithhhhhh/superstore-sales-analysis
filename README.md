@@ -319,6 +319,6 @@ By optimizing discount strategies, improving underperforming categories, and foc
 
 ## 👤 Author
 
-**KY SOTEARITH**
+**KY SOTHEARITH**
 
 *SQL • PostgreSQL • Power BI • Data Analytics Portfolio Project*
