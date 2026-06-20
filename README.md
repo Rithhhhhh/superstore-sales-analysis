@@ -1,24 +1,49 @@
-# 📊 Super Store SQL Analytics
+# 📊 Super Store Sales Analytics
 
-A deep-dive SQL analysis of the **Super Store** dataset, covering customer behavior, product performance, profitability, and sales trends. Each module below includes the SQL query, the result it surfaces, and the business insight derived from it.
+## Project Overview
+
+This project analyzes the **Super Store** dataset using PostgreSQL to uncover insights related to sales performance, customer behavior, product profitability, discount strategies, and regional performance.
+
+The objective is to transform raw transactional data into actionable business insights that support decision-making in areas such as **pricing, inventory planning, customer retention, and profit optimization**.
+
+## 🛠️ Tools Useda
+
+- PostgreSQL
+- SQL
+- Power BI
+- Git & GitHub
+
+## 🗂️ Dataset
+
+The dataset contains transactional records from **2014–2017**, including:
+
+- Orders
+- Customers
+- Products
+- Sales
+- Profit
+- Discounts
+- Regions
+- Customer Segments
 
 ---
 
-## Table of Contents
+## 📑 Table of Contents
 
 - [1. Customer Insights](#1--customer-insights-customer_analysissql)
-- [2. Product Matrix Analysis](#2--product-matrix-analysis-product_analysissql)
-- [3. Profitability & Margin Optimization](#3--profitability--margin-optimization-profitability_analysissql)
-- [4. Macro Sales & Temporal Trends](#4--macro-sales--temporal-trends-sales_analysissql)
-- [📈 Executive Strategic Summary](#-executive-strategic-summary)
+- [2. Product Analysis](#2--product-analysis-product_analysissql)
+- [3. Profitability Analysis](#3--profitability-analysis-profitability_analysissql)
+- [4. Sales & Trend Analysis](#4--sales--trend-analysis-sales_analysissql)
+- [📋 Executive Strategic Summary](#-executive-strategic-summary)
+- [✅ Conclusion](#-conclusion)
 
 ---
 
 ## 1. 🧑‍💼 Customer Insights (`customer_analysis.sql`)
 
-**Objective:** Identify high-volume purchasers and evaluate segment behaviors to distinguish revenue drivers from true bottom-line contributors.
+### Top 10 Customers by Sales
 
-### Top 10 Customers by Total Spending
+**Business Question:** Who are the top 10 customers by total spending?
 
 ```sql
 SELECT
@@ -32,9 +57,14 @@ ORDER BY total_spent DESC
 LIMIT 10;
 ```
 
-> 💡 **Key Insight:** High spending does not guarantee high profitability. For example, while **Sean Miller** ranked as a top customer by raw revenue, the account generated an overall **net loss**. This signals a critical need to adjust pricing models or restrict excessive discounting for high-volume accounts.
+> 💡 **Key Insight**
+> - High spending customers do not always generate high profits.
+> - Some customers contribute significant revenue but produce low or even negative profitability.
+> - Businesses should evaluate customer profitability alongside sales performance.
 
-### Top 10 Most Profitable Customers
+### Top 10 Customers by Profit
+
+**Business Question:** Who are the most profitable customers?
 
 ```sql
 SELECT
@@ -48,30 +78,37 @@ ORDER BY total_profit DESC
 LIMIT 10;
 ```
 
-> 💡 **Key Insight:** **Tamara Chand** ($9.0K profit) and **Raymond Buch** emerged as the most valuable individual profiles. These customers maintain high profit margins consistently across multiple distinct orders, making them ideal targets for premium loyalty retention programs.
+> 💡 **Key Insight**
+> - A small group of customers contributes a disproportionate share of total profit.
+> - These customers represent valuable long-term assets and should be prioritized through retention and loyalty programs.
 
-### Customer Segment Evaluation
+### Customer Segment Analysis
+
+**Business Question:** Which customer segment contributes the most orders, sales, and profit?
 
 ```sql
 SELECT
     segment,
     COUNT(DISTINCT(order_id)) AS total_orders,
     SUM(sales) AS total_sales,
-    SUM(profit) AS total_profits
+    SUM(profit) AS total_profit
 FROM super_store
 GROUP BY segment
 ORDER BY total_orders DESC;
 ```
 
-> 💡 **Key Insight:** The **Consumer** segment stands as the company's core engine, responsible for the largest volume of orders, absolute sales, and net profits.
+> 💡 **Key Insight**
+> - The **Consumer** segment generates the highest number of orders.
+> - Consumer customers also contribute the largest share of sales and profit.
+> - This segment remains the primary driver of overall business performance.
 
 ---
 
-## 2. 📦 Product Matrix Analysis (`product_analysis.sql`)
+## 2. 📦 Product Analysis (`product_analysis.sql`)
 
-**Objective:** Deconstruct the product catalog to evaluate structural performance across categories and understand the volume vs. value dynamic.
+### Top 10 Products by Quantity Sold
 
-### Top 10 Products by Sales Volume (Quantity)
+**Business Question:** Which products are purchased most frequently?
 
 ```sql
 SELECT
@@ -84,9 +121,14 @@ ORDER BY total_quantity_sold DESC
 LIMIT 10;
 ```
 
-> 💡 **Key Insight:** Everyday office supplies (Staples, Staple envelope, Easy-staple paper) completely dominate order velocity. However, they generate minimal comparative revenue. The store relies on these high-volume items to drive traffic, while technical products capture higher ticket sizes.
+> 💡 **Key Insight**
+> - Office supply products dominate sales volume.
+> - Frequently purchased items generate steady demand but relatively low revenue.
+> - These products are important for maintaining customer engagement and recurring purchases.
 
-### Category Margin Disparities
+### Category Profitability Analysis
+
+**Business Question:** Which categories generate the highest and lowest profit margins?
 
 ```sql
 SELECT
@@ -99,31 +141,27 @@ GROUP BY category
 ORDER BY profit_margin ASC;
 ```
 
-> 💡 **Key Insight (The Furniture Paradox):** The **Furniture** category presents a severe performance bottleneck. It generated over **$742K** in sales but yielded an abysmal **2.49%** profit margin. Meanwhile, Office Supplies and Technology operated efficiently with profit margins scaling safely above **17%**.
+> 💡 **Key Insight**
+> - **Furniture** generates strong revenue but produces the lowest profit margin.
+> - **Office Supplies** and **Technology** operate with significantly stronger profitability.
+> - Furniture requires additional investigation to identify the causes of low margins.
 
-### The Technology Volatility Split
+### Product Profit Winners and Losers
 
-```sql
--- Top Product by Profit
-SELECT product_name, category, SUM(profit) AS total_profit
-FROM super_store GROUP BY product_name, category ORDER BY total_profit DESC LIMIT 1;
--- Result: Canon imageCLASS 2200 Advanced Copier ($25.2K profit)
+**Business Question:** Which products generate the highest profit and largest losses?
 
--- Top Product by Net Loss
-SELECT product_name, category, SUM(profit) AS total_profit
-FROM super_store GROUP BY product_name, category ORDER BY total_profit ASC LIMIT 1;
--- Result: Cubify CubeX 3D Printer Double Head Print (-$8.9K loss)
-```
-
-> 💡 **Key Insight:** Technology acts as both the store's primary profit generator and its greatest source of risk. The category contains high-yield assets like the **Canon imageCLASS Copier** alongside major losses like the **Cubify 3D Printer**. This indicates pricing mismatches or excessive supplier costs on specialized tech.
+> 💡 **Key Insight**
+> - High-performing technology products contribute significantly to total profit.
+> - Some specialized technology products generate substantial losses.
+> - Product-level profitability should be monitored to prevent losses from offsetting gains elsewhere.
 
 ---
 
-## 3. 💰 Profitability & Margin Optimization (`profitability_analysis.sql`)
+## 3. 💰 Profitability Analysis (`profitability_analysis.sql`)
 
-**Objective:** Isolate operational leaks by looking closely at cross-category structures, geographical efficiency, and discounting thresholds.
+### Sub-Category Profit Margin Analysis
 
-### Sub-Category Margin Architecture
+**Business Question:** Which sub-categories are the most and least profitable?
 
 ```sql
 SELECT
@@ -135,9 +173,14 @@ GROUP BY category, sub_category
 ORDER BY category, profit_margin DESC;
 ```
 
-> 💡 **Key Insight:** While multiple sub-categories in Office Supplies regularly achieve margins above **40%**, sections of the Furniture portfolio (specifically **Tables** and **Bookcases**) operate at net losses, bringing down the entire category's performance.
+> 💡 **Key Insight**
+> - Several Office Supply sub-categories maintain exceptionally high profit margins.
+> - Certain Furniture sub-categories generate losses despite contributing meaningful sales.
+> - Sub-category analysis helps identify specific operational weaknesses.
 
-### The Impact of Discounting on Net Margins
+### Discount vs Profit Analysis
+
+**Business Question:** How do discounts affect profitability?
 
 ```sql
 SELECT
@@ -147,49 +190,83 @@ SELECT
         WHEN discount < 0.2 THEN '10%-19%'
         WHEN discount < 0.3 THEN '20%-29%'
         WHEN discount < 0.4 THEN '30%-39%'
-        WHEN discount < 0.5 THEN '40%-49%'
-        WHEN discount < 0.6 THEN '50%-59%'
-        WHEN discount < 0.7 THEN '60%-69%'
-        WHEN discount < 0.8 THEN '70%-79%'
-        WHEN discount < 0.9 THEN '80%-89%'
-        ELSE '90%+'
+        ELSE '40%+'
     END AS discount_category,
     COUNT(DISTINCT(order_id)) AS total_order,
     SUM(sales) AS total_sales,
     SUM(profit) AS total_profit,
-    ROUND((SUM(profit)*100)/SUM(sales), 2) AS profit_margin
+    ROUND((SUM(profit) * 100) / SUM(sales), 2) AS profit_margin
 FROM super_store
-GROUP BY 1 ORDER BY discount_category;
+GROUP BY 1;
 ```
 
-> 💡 **Key Insight:** Any discount rate set at or above **30%** consistently results in a **net operational loss**. Price promotions above this point completely wipe out margins across all categories, proving that the store's current promotional strategy frequently destroys value.
+> 💡 **Key Insight**
+> - Profit margins decline as discount levels increase.
+> - Heavy discounting significantly reduces profitability.
+> - Excessive discounts can eliminate profits entirely and should be carefully controlled.
 
-### Regional Efficiencies
+### Profitability by Region
+
+**Business Question:** Which regions generate the most profit?
 
 ```sql
-SELECT region, SUM(sales) AS total_sales, SUM(profit) AS total_profit,
-       ROUND(((SUM(profit)/SUM(sales))*100), 2) AS profit_margin
-FROM super_store GROUP BY region ORDER BY total_profit DESC;
+SELECT
+    region,
+    SUM(sales) AS total_sales,
+    SUM(profit) AS total_profit,
+    ROUND((SUM(profit)/SUM(sales))*100, 2) AS profit_margin
+FROM super_store
+GROUP BY region
+ORDER BY total_profit DESC;
 ```
 
-> 💡 **Key Insight:** The **West** region leads the business in both total revenue and net margin. Conversely, the **Central** region underperforms significantly—generating over **$500K** in sales but capturing very low relative profits, indicating high local overhead costs or aggressive local discounting.
+> 💡 **Key Insight**
+> - The **West** region generates the highest sales and profit.
+> - Regional profitability varies considerably despite similar sales performance.
+> - Geographic performance should be considered when allocating resources and marketing budgets.
 
 ---
 
-## 4. 📅 Macro Sales & Temporal Trends (`sales_analysis.sql`)
+## 4. 📈 Sales & Trend Analysis (`sales_analysis.sql`)
 
-**Objective:** Map transactional performance over time to help guide inventory strategies, staff scheduling, and seasonal marketing campaigns.
+### Sales Performance by Region
 
-### Macro Growth Trajectory (2014 – 2017)
+**Business Question:** Which region generates the highest sales?
 
 ```sql
-SELECT EXTRACT(YEAR FROM order_date::DATE) AS year, SUM(sales) AS total_sales
-FROM super_store GROUP BY 1 ORDER BY year;
+SELECT
+    region,
+    SUM(sales) AS total_sales
+FROM super_store
+GROUP BY region
+ORDER BY total_sales DESC;
 ```
 
-> 💡 **Key Insight:** The store achieved strong long-term expansion, with total annual sales growing by more than **50%** from 2014 to 2017, despite a brief plateau in 2015.
+> 💡 **Key Insight**
+> - The **West** region leads overall sales performance.
+> - West and East contribute the majority of company revenue.
+> - South generates the lowest sales and may require additional growth initiatives.
 
-### Q4 Seasonal Demand Shifts (2017 Deep Dive)
+### Annual Sales Trend
+
+**Business Question:** How has sales performance changed over time?
+
+```sql
+SELECT
+    EXTRACT(YEAR FROM order_date::DATE) AS year,
+    SUM(sales) AS total_sales
+FROM super_store
+GROUP BY year
+ORDER BY year;
+```
+
+> 💡 **Key Insight**
+> - Sales demonstrate strong growth between 2014 and 2017.
+> - Revenue expansion indicates increasing market demand and business growth.
+
+### Monthly Sales Trend (2017)
+
+**Business Question:** How did sales perform throughout 2017?
 
 ```sql
 SELECT
@@ -197,24 +274,51 @@ SELECT
     SUM(sales) AS total_sales
 FROM super_store
 WHERE EXTRACT(YEAR FROM order_date::DATE) = 2017
-GROUP BY EXTRACT(MONTH FROM order_date::DATE), TO_CHAR(order_date::DATE, 'Mon')
-ORDER BY EXTRACT(MONTH FROM order_date::DATE);
+GROUP BY
+    EXTRACT(MONTH FROM order_date::DATE),
+    TO_CHAR(order_date::DATE, 'Mon')
+ORDER BY
+    EXTRACT(MONTH FROM order_date::DATE);
 ```
 
-> 💡 **Key Insight:** Transactions follow a clear seasonal pattern. Sales climb steadily through the second half of the year, peaking sharply in **Q4 (September–December)**, with **November 2017** alone bringing in **$118.4K**. In contrast, Q1 (January–February) shows lower sales activity each year.
+> 💡 **Key Insight**
+> - Sales increased steadily throughout the year.
+> - **Q4 (October–December)** delivered the strongest performance.
+> - **November** recorded the highest monthly sales.
+> - Seasonal demand patterns should guide inventory and marketing planning.
 
 ---
 
-## 📈 Executive Strategic Summary
+## 📋 Executive Strategic Summary
 
-Based on the insights generated from this analysis, the store should focus on three key strategic improvements:
+Based on the analysis, the following recommendations are proposed:
 
-| # | Strategic Action | Rationale |
-|---|---|---|
-| 1 | **Establish Strict Discount Controls** | Stop using arbitrary discount rates above 30%. Introduce automated alerts to flag orders where combined discounts push margins into negative territory. |
-| 2 | **Restructure the Furniture Category** | Review supplier agreements and shipping rates for Tables and Bookcases to fix the low 2.49% profit margin. If margins cannot be improved, reduce warehouse space for low-performing items and reallocate it to high-margin Office Supplies or high-value Technology lines. |
-| 3 | **Align Operations with Seasonal Peaks** | Use data from the strong Q4 sales trends to improve supply chain planning. Increase inventory and marketing starting in August to capitalize on year-end demand, while scaling down spending in the slower months of January and February. |
+| Priority | Recommendation | Business Impact |
+|----------|-----------------|------------------|
+| 🔴 High | Implement stricter discount controls | Prevent margin erosion and improve profitability |
+| 🔴 High | Improve Furniture category performance | Address low margins and increase overall profit |
+| 🟡 Medium | Prioritize high-profit customers | Improve customer retention and lifetime value |
+| 🟡 Medium | Focus on profitable regions | Optimize resource allocation and marketing spend |
+| 🟡 Medium | Prepare for Q4 demand spikes | Improve inventory planning and customer service |
 
 ---
 
-<p align="center"><sub>Generated from Super Store SQL analytics modules</sub></p>
+## ✅ Conclusion
+
+This analysis reveals several important business opportunities:
+
+- The **West** region is the strongest contributor to both sales and profit.
+- **Consumer** customers represent the company's largest customer segment.
+- **Technology** products drive substantial profitability, while **Furniture** remains a weak-performing category.
+- Excessive discounting significantly reduces profit margins.
+- Sales consistently peak during **Q4**, highlighting strong seasonal demand patterns.
+
+By optimizing discount strategies, improving underperforming categories, and focusing on high-value customers, the business can increase profitability while maintaining long-term sales growth.
+
+---
+
+## 👤 Author
+
+**KY SOTEARITH**
+
+*SQL • PostgreSQL • Power BI • Data Analytics Portfolio Project*
