@@ -1,17 +1,37 @@
 # 📊 Super Store Sales Analytics
 
+An end-to-end data analytics project that explores sales performance, customer behavior, profitability, and business growth opportunities using the Super Store dataset.
+
 ## Project Overview
 
 This project analyzes the **Super Store** dataset using PostgreSQL to uncover insights related to sales performance, customer behavior, product profitability, discount strategies, and regional performance.
 
 The objective is to transform raw transactional data into actionable business insights that support decision-making in areas such as **pricing, inventory planning, customer retention, and profit optimization**.
 
-## 🛠️ Tools Useda
+## 🛠️ Tools Used
 
 - PostgreSQL
 - SQL
 - Power BI
-- Git & GitHub
+- GitHub
+
+## 🔄 Project Workflow
+
+```text
+CSV Dataset
+   ↓
+Data Cleaning
+   ↓
+PostgreSQL
+   ↓
+SQL Analysis
+   ↓
+Business Insights
+   ↓
+Power BI Dashboard
+   ↓
+Strategic Recommendations
+```
 
 ## 🗂️ Dataset
 
@@ -30,12 +50,30 @@ The dataset contains transactional records from **2014–2017**, including:
 
 ## 📑 Table of Contents
 
+- [🖥️ Power BI Dashboard Preview](#️-power-bi-dashboard-preview)
 - [1. Customer Insights](#1--customer-insights-customer_analysissql)
 - [2. Product Analysis](#2--product-analysis-product_analysissql)
 - [3. Profitability Analysis](#3--profitability-analysis-profitability_analysissql)
 - [4. Sales & Trend Analysis](#4--sales--trend-analysis-sales_analysissql)
+- [📁 Repository Structure](#-repository-structure)
 - [📋 Executive Strategic Summary](#-executive-strategic-summary)
+- [🚀 Skills Demonstrated](#-skills-demonstrated)
 - [✅ Conclusion](#-conclusion)
+
+---
+
+## 🖥️ Power BI Dashboard Preview
+
+### Executive Overview
+![Executive Overview](images/executive_overview.png)
+
+### Product & Profitability Analysis
+![Product Dashboard](images/product_profitability.png)
+
+### Customer Analysis
+![Customer Dashboard](images/customer_analysis.png)
+
+> 📦 The full interactive `.pbix` file is available in the [`powerbi/`](powerbi/superstore_dashboard.pbix) folder.
 
 ---
 
@@ -289,6 +327,32 @@ ORDER BY
 
 ---
 
+## 📁 Repository Structure
+
+```text
+project/
+│
+├── data/
+│
+├── sql/
+│   ├── customer_analysis.sql
+│   ├── product_analysis.sql
+│   ├── profitability_analysis.sql
+│   └── sales_analysis.sql
+│
+├── powerbi/
+│   └── superstore_dashboard.pbix
+│
+├── images/
+│   ├── executive_overview.png
+│   ├── product_profitability.png
+│   └── customer_analysis.png
+│
+└── README.md
+```
+
+---
+
 ## 📋 Executive Strategic Summary
 
 Based on the analysis, the following recommendations are proposed:
@@ -300,6 +364,19 @@ Based on the analysis, the following recommendations are proposed:
 | 🟡 Medium | Prioritize high-profit customers | Improve customer retention and lifetime value |
 | 🟡 Medium | Focus on profitable regions | Optimize resource allocation and marketing spend |
 | 🟡 Medium | Prepare for Q4 demand spikes | Improve inventory planning and customer service |
+
+---
+
+## 🚀 Skills Demonstrated
+
+| SQL | Power BI | Business Analysis |
+|---|---|---|
+| Aggregations | KPI Cards | Customer Insights |
+| CASE Statements | Interactive Dashboards | Product Performance |
+| Profitability Analysis | DAX Measures | Profitability Optimization |
+| Customer Segmentation | Slicers & Filters | Sales Trend Analysis |
+| Trend Analysis | Data Visualization | Strategic Recommendations |
+| Business Reporting | | |
 
 ---
 
