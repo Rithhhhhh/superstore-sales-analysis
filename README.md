@@ -9,7 +9,7 @@ This project analyzes the **Super Store** dataset using PostgreSQL to uncover in
 The objective is to transform raw transactional data into actionable business insights that support decision-making in areas such as **pricing, inventory planning, customer retention, and profit optimization**.
 
 ## 🛠️ Tools Used
-
+- Microsoft Excel (Data Preparation)
 - PostgreSQL
 - SQL
 - Power BI
@@ -32,6 +32,10 @@ Power BI Dashboard
    ↓
 Strategic Recommendations
 ```
+## 🧹 Data Preparation
+
+The original dataset was inspected in Microsoft Excel before being imported into PostgreSQL. Minor adjustments and additional columns were made to support the analysis and reporting process.
+
 
 ## 🗂️ Dataset
 
